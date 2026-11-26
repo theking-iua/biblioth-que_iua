@@ -1,0 +1,17 @@
+{
+  "name": "pmb-iua",
+  "private": true,
+  "version": "2.0.0",
+  "description": "SIGB de la bibliothèque de l'IUA : API Node.js + Neon, appli admin (React), appli lecteur (PWA) et appli Android (React Native)",
+  "scripts": {
+    "install:all": "npm install && npm --prefix api install && npm --prefix admin install && npm --prefix mobile install && npm --prefix etudiant install",
+    "dev": "concurrently -n api,admin,mobile -c blue,magenta,green \"npm --prefix api run dev\" \"npm --prefix admin run dev\" \"npm --prefix mobile run dev\"",
+    "build": "npm --prefix admin run build && npm --prefix mobile run build",
+    "db:init": "npm --prefix api run db:init",
+    "db:demo": "npm --prefix api run db:demo",
+    "etudiant": "npm --prefix etudiant start"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}

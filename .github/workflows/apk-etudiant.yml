@@ -1,0 +1,82 @@
+# Fabrique l'APK Android de l'appli étudiant (dossier etudiant/) sur les serveurs de GitHub.
+#
+#  À la main : onglet « Actions » → « APK Android (appli étudiant) » → « Run workflow »
+#              → saisir l'adresse de l'API → l'APK est à télécharger en bas de la page du build (« Artifacts »).
+#  Par tag    : git tag etudiant-v1.0.0 && git push --tags → l'APK est aussi publié dans « Releases ».
+#
+# Adresse de l'API par défaut : variable du dépôt API_URL (Settings → Secrets and variables → Actions → Variables).
+
+name: APK Android (appli étudiant)
+
+on:
+  workflow_dispatch:
+    inputs:
+      api_url:
+        description: "Adresse de l'API (terminée par /api)"
+        required: false
+        default: ""
+  push:
+    tags: ["etudiant-v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        working-directory: etudiant
+    env:
+      EXPO_PUBLIC_API_URL: ${{ inputs.api_url || vars.API_URL || 'https://api.biblio.iua.ci/api' }}
+      NODE_OPTIONS: --max-old-space-size=4096
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: etudiant/package-lock.json
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: android-actions/setup-android@v3
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Installer les dépendances
+        run: npm ci
+
+      - name: Générer le projet Android (expo prebuild)
+        run: npx expo prebuild -p android --clean --no-install
+
+      - name: Compiler l'APK
+        working-directory: etudiant/android
+        run: ./gradlew assembleRelease --no-daemon
+
+      - name: Nommer l'APK
+        id: apk
+        run: |
+          VERSION=$(node -p "require('./app.json').expo.version")
+          NAME="biblio-iua-${VERSION}.apk"
+          cp android/app/build/outputs/apk/release/app-release.apk "$NAME"
+          echo "name=$NAME" >> "$GITHUB_OUTPUT"
+          echo "API utilisée : $EXPO_PUBLIC_API_URL"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.apk.outputs.name }}
+          path: etudiant/${{ steps.apk.outputs.name }}
+          retention-days: 30
+
+      - name: Publier dans les Releases (build déclenché par un tag)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: etudiant/${{ steps.apk.outputs.name }}

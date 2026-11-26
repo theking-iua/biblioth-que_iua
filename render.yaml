@@ -1,0 +1,31 @@
+# Déploiement de l'API sur Render (https://render.com) : New → Blueprint → ce dépôt.
+# Les deux applis React se déploient à part (Vercel, Netlify ou Render « Static Site »), voir README.
+services:
+  - type: web
+    name: pmb-iua-api
+    runtime: node
+    rootDir: api
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGINS
+        sync: false
+      - key: PUBLIC_BASE_URL
+        sync: false
+      - key: APP_TIMEZONE
+        value: Africa/Abidjan
+      - key: CRON_ENABLED
+        value: "true"
+      - key: UPLOAD_DIR
+        value: /var/data/uploads
+    disk:
+      name: uploads
+      mountPath: /var/data
+      sizeGB: 1
