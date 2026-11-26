@@ -143,4 +143,5 @@ Les paramètres (`?id=`, `?q=`…) et les réponses JSON sont identiques, ce qui
 - **Dates** à l'heure d'Abidjan quelle que soit la région Neon (`APP_TIMEZONE`).
 - Nouveau : un lecteur peut annuler sa propre demande d'emprunt depuis l'appli.
 #   b i b l i o t h - q u e _ i u a  
+ #   b i b l i o t h - q u e _ i u a  
  
