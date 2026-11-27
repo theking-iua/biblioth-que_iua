@@ -17,7 +17,8 @@
     "import:lecteurs": "node --env-file-if-exists=.env scripts/import-lecteurs.js",
     "migrate:mysql": "node --env-file-if-exists=.env scripts/migrate-from-mysql.js",
     "test": "node --env-file-if-exists=.env --test test/*.test.js",
-    "import:pmb": "node --env-file-if-exists=.env scripts/import-pmb.js"
+    "import:pmb": "node --env-file-if-exists=.env scripts/import-pmb.js",
+    "db:livres": "node --env-file-if-exists=.env scripts/ajout-livres.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

@@ -198,7 +198,7 @@ export default function BookDetailPage() {
           <div className="mt-5 flex items-center gap-3 p-4 rounded-2xl bg-surface border border-line">
             <MapPin size={20} className="text-brand shrink-0" />
             <div>
-              <p className="text-sm text-muted">En rayon</p>
+              <p className="text-sm text-muted">Emplacement</p>
               <p className="font-semibold">
                 {book.localisation}
                 {book.cote ? `, cote ${book.cote}` : ""}

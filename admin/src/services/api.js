@@ -1,7 +1,11 @@
 // Client de l'API PMB IUA (Node.js + Neon). Partagé à l'identique par l'appli admin et l'appli mobile.
 
-// URL de l'API : variable VITE_API_URL dans .env (ex. https://api.biblio.iua.ci/api)
-export const API_BASE_URL = (import.meta.env.VITE_API_URL || "http://localhost:4000/api").replace(/\/$/, "");
+// Application de bureau (Windows) : l'adresse du serveur est réglée dans l'appli (menu Fichier → Serveur)
+const desktop = typeof window !== "undefined" ? window.pmbDesktop : undefined;
+export const IS_DESKTOP = !!desktop;
+
+// URL de l'API : réglage de l'appli de bureau, sinon variable VITE_API_URL dans .env (ex. https://api.biblio.iua.ci/api)
+export const API_BASE_URL = (desktop?.config?.apiUrl || import.meta.env.VITE_API_URL || "http://localhost:4000/api").replace(/\/$/, "");
 
 // Session expirée / jeton invalide : on nettoie et on renvoie vers la connexion
 function handleUnauthorized(endpoint) {

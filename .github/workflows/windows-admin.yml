@@ -1,0 +1,49 @@
+# Fabrique l'installateur Windows de l'espace admin (dossier bureau/) sur un vrai Windows de GitHub.
+#  À la main : onglet « Actions » → « Installateur Windows (admin) » → « Run workflow »
+#  Par tag    : git tag bureau-v2.0.0 && git push --tags → l'installateur est aussi publié dans « Releases ».
+
+name: Installateur Windows (admin)
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["bureau-v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: bureau
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Installer NSIS (si absent)
+        shell: pwsh
+        run: if (-not (Get-Command makensis -ErrorAction SilentlyContinue) -and -not (Test-Path "C:\Program Files (x86)\NSIS\makensis.exe")) { choco install nsis -y --no-progress }
+
+      - name: Dépendances
+        run: npm ci
+
+      - name: Construire l'appli et l'installateur
+        run: npm run dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PMB-IUA-Administration-Setup
+          path: bureau/release/PMB-IUA-Administration-Setup-*.exe
+          retention-days: 30
+
+      - name: Publier dans les Releases (build déclenché par un tag)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: bureau/release/PMB-IUA-Administration-Setup-*.exe

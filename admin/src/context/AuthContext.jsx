@@ -2,7 +2,8 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import api from "../services/api";
 
 const STAFF = ["admin", "bibliothecaire"];
-export const MOBILE_APP_URL = import.meta.env.VITE_MOBILE_URL || "http://localhost:5174";
+export const MOBILE_APP_URL =
+  (typeof window !== "undefined" && window.pmbDesktop?.config?.mobileUrl) || import.meta.env.VITE_MOBILE_URL || "http://localhost:5174";
 
 // L'appli admin n'accepte que le personnel : un lecteur est renvoyé vers l'appli mobile
 function assertStaff(user) {

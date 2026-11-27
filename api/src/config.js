@@ -26,6 +26,7 @@ export const config = {
     "http://localhost:5174", // appli mobile (dev)
     "http://127.0.0.1:5173",
     "http://127.0.0.1:5174",
+    "app://admin", // application de bureau Windows (dossier bureau/)
   ]),
 
   // URL publique de l'API (pour construire les liens de photos)

@@ -1,4 +1,5 @@
 import React from "react";
+import api from "../services/api";
 
 // Couverture d'un ouvrage : l'image si elle existe, sinon un « dos de livre » à la couleur de la notice,
 // avec l'étiquette de cote blanche collée en bas, comme sur les rayons de la bibliothèque.
@@ -12,10 +13,11 @@ export default function BookCover({ book, size = "md", className = "" }) {
   const s = sizes[size];
   const color = /^#[0-9a-f]{3,8}$/i.test(book?.couleur || "") ? book.couleur : "#14213D";
 
-  if (book?.couverture_url && /^https?:\/\//.test(book.couverture_url)) {
+  // Couverture : lien externe (http…) ou image hébergée par l'API (/uploads/…)
+  if (book?.couverture_url && /^(https?:\/\/|\/uploads\/)/.test(book.couverture_url)) {
     return (
       <img
-        src={book.couverture_url}
+        src={api.getFileUrl(book.couverture_url)}
         alt=""
         loading="lazy"
         className={`${s.box} object-cover shadow-md shadow-ink/20 shrink-0 bg-line ${className}`}

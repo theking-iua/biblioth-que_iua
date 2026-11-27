@@ -38,8 +38,8 @@ export default {
         },
       },
       fontFamily: {
-        display: ["Inter", "sans-serif"],
-        body: ["Inter", "sans-serif"],
+        display: ["\"Inter Variable\"", "Inter", "sans-serif"],
+        body: ["\"Inter Variable\"", "Inter", "sans-serif"],
       },
       borderRadius: {
         "2xl": "1rem",

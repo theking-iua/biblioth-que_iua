@@ -1,6 +1,6 @@
 # PMB IUA v2 : bibliothèque de l'Institut Universitaire d'Abidjan
 
-Le site unique (React + PHP + MySQL) est remplacé par **quatre projets** qui partagent la même base de données :
+Le site unique (React + PHP + MySQL) est remplacé par **cinq projets** qui partagent la même base de données :
 
 | Dossier | Rôle | Pour qui | Technologie | Port (dev) |
 |---|---|---|---|---|
@@ -8,7 +8,10 @@ Le site unique (React + PHP + MySQL) est remplacé par **quatre projets** qui pa
 | `admin/` | Espace d'administration (ordinateur) | Bibliothécaires, administrateurs | React 18 + Vite + Tailwind | 5173 |
 | `mobile/` | Appli mobile installable (PWA) | Étudiants, lecteurs, visiteurs | React 18 + Vite + Tailwind | 5174 |
 | `etudiant/` | **Appli Android (APK) / iOS** | Étudiants, lecteurs, visiteurs | React Native + Expo SDK 58 | — |
+| `bureau/` | **Appli Windows (.exe) de l'admin** | Bibliothécaires, administrateurs | Electron 45 (embarque `admin/`) | — |
 
+> **Appli Windows de l'admin** : voir [`bureau/README.md`](bureau/README.md) (installateur `PMB-IUA-Administration-Setup-2.0.0.exe`).
+>
 > **APK Android** : voir [`etudiant/README.md`](etudiant/README.md). En bref : dépôt GitHub → Actions → « APK Android (appli étudiant) » → Run workflow.
 
 ```
@@ -58,6 +61,24 @@ npm run dev                # lance l'API, l'admin et le mobile ensemble
 - Sur un téléphone du même Wi-Fi : `http://<IP-du-PC>:5174` (ajoutez cette adresse à `CORS_ORIGINS`).
 
 > ⚠ Changez le mot de passe administrateur par défaut dès la première connexion.
+
+## 3 ter. Ajouter les livres numériques récupérés de l'ancien PMB
+
+Le dossier `api/db/livres/` contient les livres trouvés dans l'archive de l'ancien PMB (couvertures, PDF, EPUB, notices dans `livres.json`) :
+
+| Livre | Fichier mis en ligne |
+|---|---|
+| *Entrepôts et magasins*, Michel Roux (Eyrolles, 2008) | Notice + couverture. Le PDF n'est **pas** mis en ligne : œuvre protégée (voir ci-dessous) |
+| *Analyse genre du programme de coopération Côte d'Ivoire - UNICEF (2003-2007)*, Odile Akpaka | PDF (converti depuis le .docx d'origine) |
+| *Histoire de Don Quichotte*, Cervantès (Garnier, 1887) | EPUB Gallica, domaine public |
+| *Les Fleurs du mal*, Baudelaire (1857) | EPUB Gallica, domaine public |
+
+```bash
+npm --prefix api run db:livres
+```
+Relançable sans doublon. Les fichiers sont copiés dans `api/uploads/documents/` (à mettre en ligne avec l'API). Pour ajouter d'autres livres plus tard : déposez le fichier dans `api/db/livres/`, ajoutez une entrée dans `livres.json`, relancez la commande.
+
+*Entrepôts et magasins* : si la bibliothèque a le droit de diffuser ce PDF, copiez `Entrepôts et magasins Copy.pdf` (dossier `opac_css/texte intégral/` de l'ancien PMB) dans `api/db/livres/` sous le nom `entrepots-et-magasins.pdf`, puis lancez `npm --prefix api run db:livres -- --inclure-proteges`.
 
 ## 3 bis. Reprendre les données de l'ancien **PMB** (livres, lecteurs, prêts)
 
@@ -146,6 +167,3 @@ Les paramètres (`?id=`, `?q=`…) et les réponses JSON sont identiques, ce qui
 - **Réservations simultanées** : verrou pour que deux lecteurs n'obtiennent pas le même rang.
 - **Dates** à l'heure d'Abidjan quelle que soit la région Neon (`APP_TIMEZONE`).
 - Nouveau : un lecteur peut annuler sa propre demande d'emprunt depuis l'appli.
-#   b i b l i o t h - q u e _ i u a  
- #   b i b l i o t h e q u e _ i u a  
- 

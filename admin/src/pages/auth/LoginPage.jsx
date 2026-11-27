@@ -4,7 +4,7 @@ import { LogIn, AlertTriangle, Lock, Mail, Smartphone, ShieldCheck } from "lucid
 import { useAuth, MOBILE_APP_URL } from "../../context/AuthContext";
 import { showToast } from "../../components/common/Toast";
 import DarkModeToggle from "../../components/common/DarkModeToggle";
-import api from "../../services/api";
+import api, { IS_DESKTOP } from "../../services/api";
 
 // Connexion à l'espace d'administration (personnel uniquement)
 export default function LoginPage() {
@@ -21,6 +21,8 @@ export default function LoginPage() {
 
   // Le bouton Microsoft 365 n'apparaît que si le SSO est configuré côté serveur
   useEffect(() => {
+    // Microsoft 365 ne peut pas rediriger vers l'application de bureau : bouton masqué dans l'appli Windows
+    if (IS_DESKTOP) return;
     api.getSsoConfig().then(setSso).catch(() => setSso({ enabled: false }));
   }, []);
 

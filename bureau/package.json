@@ -1,0 +1,84 @@
+{
+  "name": "pmb-iua-admin-bureau",
+  "productName": "PMB IUA Administration",
+  "version": "2.0.0",
+  "description": "PMB IUA — application de bureau Windows de l'espace d'administration (bibliothécaires et administrateurs)",
+  "author": "Institut Universitaire d'Abidjan — Service des Bibliothèques",
+  "license": "UNLICENSED",
+  "private": true,
+  "main": "src/main.js",
+  "scripts": {
+    "admin:build": "npm --prefix ../admin install && npm --prefix ../admin run build && node scripts/copier-admin.js",
+    "start": "npm run admin:build && electron .",
+    "dist": "npm run admin:build && electron-builder --win --x64 --dir && node scripts/installateur.js",
+    "dist:dossier": "npm run admin:build && electron-builder --win --x64 --dir",
+    "dist:electron-builder": "npm run admin:build && electron-builder --win --x64"
+  },
+  "build": {
+    "appId": "ci.iua.bibliotheque.admin",
+    "productName": "PMB IUA Administration",
+    "copyright": "© Institut Universitaire d'Abidjan",
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "src/**/*",
+      "desktop-pages/**/*",
+      "app-admin/**/*",
+      "package.json"
+    ],
+    "asar": true,
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico",
+      "artifactName": "PMB-IUA-Administration-${version}-${arch}.${ext}",
+      "signAndEditExecutable": false
+    },
+    "portable": {
+      "artifactName": "PMB-IUA-Administration-${version}-portable.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "PMB IUA Administration",
+      "menuCategory": "IUA",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerLanguages": [
+        "fr_FR"
+      ],
+      "language": "1036",
+      "deleteAppDataOnUninstall": false,
+      "artifactName": "PMB-IUA-Administration-Setup-${version}.${ext}"
+    },
+    "afterPack": "scripts/after-pack.js",
+    "electronLanguages": [
+      "fr",
+      "en-US"
+    ]
+  },
+  "devDependencies": {
+    "electron": "^45.5.0",
+    "electron-builder": "^26.18.0",
+    "pe-library": "^2.0.3",
+    "resedit": "^3.1.1"
+  }
+}

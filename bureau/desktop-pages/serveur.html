@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'" />
+  <title>Serveur de la bibliothèque</title>
+  <link rel="stylesheet" href="serveur.css" />
+</head>
+<body>
+  <main>
+    <header>
+      <img src="icon.png" alt="" width="48" height="48" />
+      <div>
+        <h1>Serveur de la bibliothèque</h1>
+        <p id="intro">Adresse de l'API PMB IUA à laquelle cet ordinateur se connecte.</p>
+      </div>
+    </header>
+
+    <form id="form" novalidate>
+      <label for="apiUrl">Adresse de l'API</label>
+      <input id="apiUrl" type="url" placeholder="https://api.biblio.iua.ci/api" autocomplete="off" spellcheck="false" required />
+      <p class="hint">Fournie par le service informatique. Elle se termine par <code>/api</code>.<br />
+        Sur le réseau de la bibliothèque : <code>http://192.168.1.10:4000/api</code> (adresse du serveur).</p>
+
+      <label for="mobileUrl">Adresse de l'application des lecteurs <span class="opt">(facultatif)</span></label>
+      <input id="mobileUrl" type="url" placeholder="https://biblio.iua.ci" autocomplete="off" spellcheck="false" />
+      <p class="hint">Proposée aux lecteurs qui essaient de se connecter ici.</p>
+
+      <div id="status" role="status" aria-live="polite" hidden></div>
+
+      <div class="actions">
+        <button type="button" id="test" class="secondary">Tester la connexion</button>
+        <span class="spacer"></span>
+        <button type="button" id="cancel" class="secondary">Annuler</button>
+        <button type="submit" id="save">Enregistrer</button>
+      </div>
+    </form>
+    <p class="version" id="version"></p>
+  </main>
+  <script src="serveur.js"></script>
+</body>
+</html>
