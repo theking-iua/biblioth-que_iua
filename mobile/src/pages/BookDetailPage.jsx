@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import { Heart, MapPin, Share2, CheckCircle2, Clock, BookOpen } from "lucide-react";
+import { Heart, MapPin, Share2, CheckCircle2, Clock, BookOpen, ExternalLink } from "lucide-react";
 import api from "../services/api";
 import { useAuth } from "../context/AuthContext";
 import BookCover from "../components/BookCover";
@@ -188,6 +188,12 @@ export default function BookDetailPage() {
 
         <div className="mt-6">{action}</div>
 
+        {book.fichier_numerique && (
+          <a href={api.getFileUrl(book.fichier_numerique)} target="_blank" rel="noopener noreferrer" className="btn-quiet w-full mt-3">
+            <ExternalLink size={18} /> Ouvrir la version numérique
+          </a>
+        )}
+
         {book.localisation && (
           <div className="mt-5 flex items-center gap-3 p-4 rounded-2xl bg-surface border border-line">
             <MapPin size={20} className="text-brand shrink-0" />
@@ -227,7 +233,7 @@ export default function BookDetailPage() {
             <Fact label="Pages" value={book.nb_pages} />
             <Fact label="ISBN" value={book.isbn} />
             <Fact label="Domaine" value={book.categorie} />
-            <Fact label="Exemplaires" value={`${book.copies_disponibles} disponible${book.copies_disponibles > 1 ? "s" : ""} sur ${book.total_copies}`} />
+            <Fact label="Exemplaires" value={Number(book.total_copies) > 0 ? `${book.copies_disponibles} disponible${book.copies_disponibles > 1 ? "s" : ""} sur ${book.total_copies}` : null} />
           </dl>
         </section>
       </div>

@@ -234,3 +234,14 @@ CREATE TABLE IF NOT EXISTS settings (
   valeur      VARCHAR(255) NOT NULL,
   description VARCHAR(255)
 );
+
+-- ---------------------------------------------------------------- Reprise des données de l'ancien PMB
+-- Correspondance identifiant PMB → identifiant dans cette base : rend l'import relançable sans doublons.
+CREATE TABLE IF NOT EXISTS pmb_import_map (
+  entite     VARCHAR(30) NOT NULL,   -- notice, bulletin, exemplaire, lecteur, pret, pret_archive, resa, explnum
+  base       VARCHAR(64) NOT NULL,   -- nom de la base PMB d'origine (biblio, bibli…)
+  pmb_id     INTEGER NOT NULL,
+  new_id     INTEGER NOT NULL,
+  date_import TIMESTAMP(0) NOT NULL DEFAULT app_now(),
+  PRIMARY KEY (entite, base, pmb_id)
+);

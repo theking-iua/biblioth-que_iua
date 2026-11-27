@@ -59,7 +59,11 @@ npm run dev                # lance l'API, l'admin et le mobile ensemble
 
 > ⚠ Changez le mot de passe administrateur par défaut dès la première connexion.
 
-## 3. Reprendre les données de l'ancien site (MySQL/XAMPP)
+## 3 bis. Reprendre les données de l'ancien **PMB** (livres, lecteurs, prêts)
+
+Voir **[REPRISE-PMB.md](REPRISE-PMB.md)** : `npm --prefix api run import:pmb -- --mysql "mysql://root:@localhost:3306/bibli"`.
+
+## 3. Reprendre les données de l'ancien site React/PHP (MySQL/XAMPP)
 
 Les lecteurs, prêts, réservations, historique, mémoires et mots de passe sont repris tels quels (les anciens mots de passe PHP restent valables).
 
@@ -74,7 +78,7 @@ Copiez ensuite l'ancien dossier `backend/uploads/` dans `api/uploads/` pour gard
 
 ## 4. Mettre en ligne
 
-**API** (Render, Railway, un VPS…). Avec Render : *New → Blueprint* sur ce dépôt (fichier `render.yaml` fourni), puis renseiagnez :
+**API** (Render, Railway, un VPS…). Avec Render : *New → Blueprint* sur ce dépôt (fichier `render.yaml` fourni), puis renseignez :
 - `DATABASE_URL` (Neon), `CORS_ORIGINS` (les URL des deux applis, séparées par des virgules), `PUBLIC_BASE_URL` (`https://<api>/api`).
 - Les photos et PDF sont enregistrés sur disque (`UPLOAD_DIR`) : gardez un disque persistant (prévu dans `render.yaml`), sinon ils disparaissent à chaque redéploiement.
 
@@ -142,6 +146,3 @@ Les paramètres (`?id=`, `?q=`…) et les réponses JSON sont identiques, ce qui
 - **Réservations simultanées** : verrou pour que deux lecteurs n'obtiennent pas le même rang.
 - **Dates** à l'heure d'Abidjan quelle que soit la région Neon (`APP_TIMEZONE`).
 - Nouveau : un lecteur peut annuler sa propre demande d'emprunt depuis l'appli.
-#   b i b l i o t h - q u e _ i u a  
- #   b i b l i o t h - q u e _ i u a  
- 

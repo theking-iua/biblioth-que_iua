@@ -46,7 +46,7 @@ api.use(authRoutes, userRoutes, catalogueRoutes, circulationRoutes, adminRoutes,
 
 // Fichiers déposés : jamais exécutés, uniquement images et PDF
 api.use("/uploads", (req, res, next) => {
-  if (!/^\/(photos|memoires)\/[A-Za-z0-9_.-]+\.(jpg|png|webp|pdf)$/i.test(req.path)) return res.status(404).json({ error: "Fichier introuvable" });
+  if (!/^\/(photos|memoires|documents)\/[A-Za-z0-9_.-]+\.(jpg|png|webp|pdf|epub)$/i.test(req.path)) return res.status(404).json({ error: "Fichier introuvable" });
   res.setHeader("X-Content-Type-Options", "nosniff");
   res.setHeader("Content-Security-Policy", "default-src 'none'; style-src 'unsafe-inline'; sandbox");
   next();

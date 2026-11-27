@@ -6,7 +6,14 @@ import { TYPE_LABELS } from "../lib/format";
 export function Availability({ book, className = "" }) {
   const n = Number(book.copies_disponibles ?? 0);
   const total = Number(book.total_copies ?? 0);
-  if (total === 0) return <span className={`text-xs text-muted ${className}`}>Consultation sur place</span>;
+  if (total === 0)
+    return book.fichier_numerique ? (
+      <span className={`inline-flex items-center gap-1.5 text-xs font-semibold text-brand ${className}`}>
+        <span className="w-1.5 h-1.5 rounded-full bg-brand" /> Version numérique en ligne
+      </span>
+    ) : (
+      <span className={`text-xs text-muted ${className}`}>Consultation sur place</span>
+    );
   return n > 0 ? (
     <span className={`inline-flex items-center gap-1.5 text-xs font-semibold text-ok ${className}`}>
       <span className="w-1.5 h-1.5 rounded-full bg-ok" /> {n} disponible{n > 1 ? "s" : ""}
